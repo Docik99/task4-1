@@ -5,84 +5,75 @@
 
 TEST_CASE("Creating")
 {
-queue queue;
-REQUIRE( queue.gethead() == nullptr );
-REQUIRE( queue.gettail() == nullptr );
+    queue queue;
+    REQUIRE( queue.gethead() == nullptr );
+    REQUIRE( queue.gettail() == nullptr );
 }
 
-TEST_CASE("Creating with copy")
-{
-std::string result{"1  2  3  "};
-queue queue2;
-queue2.push(1);
-queue2.push(2);
-queue2.push(3);
-queue queue1(queue2);
-std::ostringstream ostream;
-queue1.print(ostream);
-REQUIRE( ostream.str() == result );
-
-}
-
-TEST_CASE("equals")
-{
-    queue queue1;
-    std::string result{"1  2  3  "};
-    queue1.push(6);
-    queue1.push(5);
-    queue1.push(4);
-    queue queue2;
-    queue2.push(1);
-    queue2.push(2);
-    queue2.push(3);
-    std::ostringstream ostream;
-    queue1 = queue2;
-    queue1.print(ostream);
-    REQUIRE( ostream.str() == result );
-}
-
-TEST_CASE("push")
-{
-queue queue;
-std::string result{"6  5  4  "};
-queue.push(6);
-queue.push(5);
-queue.push(4);
-std::ostringstream ostream;
-queue.print(ostream);
-REQUIRE( ostream.str() == result );
-std::string result1{"5  4  "};
-queue.extraction();
-std::ostringstream ostream1;
-queue.print(ostream1);
-REQUIRE( ostream1.str() == result1 );
-}
-
-TEST_CASE("getsize")
+TEST_CASE("Push")
 {
     queue queue;
-    queue.push(6);
-    queue.push(5);
-    queue.push(4);
-    REQUIRE( queue.getsize() == 3 );
+    int val;
+    for (int i = 1; i < 3000; i++) {
+        val = 1 + rand() % 100;
+        queue.push(val);
+        REQUIRE( queue.gettail()->value == val );
+        REQUIRE( queue.getsize() == i );
+    }
 }
 
-TEST_CASE("clear")
+TEST_CASE("Getsize")
 {
     queue queue;
-    std::string result{"nothing"};
-    queue.push(6);
-    queue.push(5);
-    queue.push(4);
+    for (int i = 1; i < 3000; i++)
+    {
+        queue.push(1 + rand() % 10);
+        REQUIRE( queue.getsize() == i );
+    }
+
+}
+
+TEST_CASE("Clear")
+{
+    queue queue;
+    for (int i = 1; i < 3000; i++)
+    {
+        queue.push(1 + rand() % 10);
+        REQUIRE( queue.getsize() == i );
+    }
     queue.clear();
     REQUIRE( queue.getsize() == 0 );
-    std::ostringstream ostream;
-    queue.print(ostream);
-    REQUIRE(ostream.str() == result);
+}
+
+TEST_CASE("Extraction")
+{
+    queue queue;
+    int val;
+
+    for (int i = 1; i < 500; i++) {
+        val = 1 + rand() % 100;
+        queue.push(val);
+        REQUIRE( queue.gettail()->value == val );
+        REQUIRE( queue.getsize() == i );
+    }
+
+    queue::node_t * head;
+    for (int i = 498; i >= 0; i--) {
+        head = queue.gethead()->next;
+        queue.extraction();
+        REQUIRE( queue.gethead() == head );
+        REQUIRE( queue.getsize() == i );
+    }
+
+    for (int i = 0; i < 100; i++) REQUIRE_THROWS_AS( queue.extraction() , std::out_of_range);
 }
 
 TEST_CASE("Out of range")
 {
-queue queue;
-REQUIRE_THROWS_AS( queue.extraction() , std::out_of_range);
+    queue queue;
+    for (int i = 0; i < 100; i++)
+    {
+        REQUIRE( queue.getsize() == 0 );
+        REQUIRE_THROWS_AS( queue.extraction() , std::out_of_range);
+    }
 }

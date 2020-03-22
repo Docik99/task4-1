@@ -13,19 +13,6 @@
         }
     }
 
-    void queue:: operator =(queue const & other) {
-        if(head != nullptr) {
-            while (head) {
-                node_t * temp = head;
-                head = head->next;
-                delete temp;
-            }
-        }
-        for (node_t * ptr = other.gethead(); ptr; ptr = ptr->next) {
-            push(ptr->value);
-        }
-    }
-
     void queue:: push(double value) {
         node_t * node = new node_t;
         node->value = value;

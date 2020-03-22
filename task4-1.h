@@ -3,11 +3,9 @@
 #include <string>
 
 class queue {
-private:
+public:
     struct node_t {
         node_t * next;
-        node_t *head;
-        node_t *tail;
         double value;
         int size;
     };
@@ -15,7 +13,7 @@ private:
     node_t * tail;
     int size = 0;
 
-public:
+
     node_t * gethead() const
     {
         return  head;
@@ -27,7 +25,6 @@ public:
 
     queue();
     queue(queue const & other);
-    void operator =(queue const & other);
     void push(double value);
     int getsize();
     void clear();
