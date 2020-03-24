@@ -5,14 +5,6 @@
         tail = nullptr; //конец
     }
 
-    queue::queue(queue const & other) {
-        head = nullptr;
-        tail = nullptr;
-        for (node_t * ptr = other.gethead(); ptr; ptr = ptr->next) {
-            push(ptr->value);
-        }
-    }
-
     void queue:: push(double value) {
         node_t * node = new node_t;
         node->value = value;

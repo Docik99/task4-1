@@ -24,7 +24,6 @@ public:
     }
 
     queue();
-    queue(queue const & other);
     void push(double value);
     int getsize();
     void clear();
